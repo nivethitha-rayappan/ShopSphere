@@ -3,13 +3,15 @@ package org.example;
 
 import com.shopsphere.product.Product;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // Create product objects
+        // Create products
         Product headphones = new Product(
                 101L, "Wireless Headphones", 2499.00, 10
         );
@@ -26,59 +28,48 @@ public class Main {
                 104L, "Gaming Monitor", 15999.00, 8
         );
 
-        // Create an ArrayList
+        // Store products in ArrayList
         List<Product> products = new ArrayList<>();
 
-        // Add products to the list
         products.add(headphones);
         products.add(keyboard);
         products.add(mouse);
         products.add(monitor);
-        // Display all products
-        for (Product product : products) {
 
-            System.out.println("Product ID: " + product.getId());
-            System.out.println("Product Name: " + product.getName());
-            System.out.println("Product Price: " + product.getPrice());
-            System.out.println("Quantity: " + product.getQuantity());
+        // Our first Stream
+        products.stream()
+                .forEach(product ->
+                        System.out.println(product.getName())
+                );
+        System.out.println("------------------------------------------------");
+        //price filtering stream
+        products.stream()
+                .filter(product -> product.getPrice() >3000)
+                .forEach(product -> System.out.println(product.getName()));
 
-            System.out.println("-------------------------");
-        }
+        System.out.println("------------------------------------------------");
+        // price sorting stream(reversed)
+        products.stream()
+                .sorted(Comparator.comparingDouble(Product::getPrice).reversed())
+                .forEach(product -> System.out.println(product.getName()));
+        System.out.println("------------------------------------------------");
+        //Name searching stream
+        products.stream()
+                .filter(product -> product.getName().contains("Gaming"))
+                .forEach(product -> System.out.println(product.getName()));
+        System.out.println("------------------------------------------------");
+        //total inventory stream
+      int totalQuantity = products.stream()
+                .mapToInt(Product::getQuantity)
+                        .sum();
+        System.out.println(totalQuantity);
 
-//Hash set implementation
-        Set<String> categories = new HashSet<>();
-        categories.add("Electronics");
-        categories.add("Clothing");
-        categories.add("Electronics");
-        categories.add("Books");
-        categories.add("Clothing");
+        System.out.println("------------------------------------------------");
+        //Most expensive product stream
 
-        System.out.println(categories);
-        System.out.println(categories.size());
-
-        //Hashmap implementation
-        Map<Long, Product> productMap = new HashMap<>();
-
-        productMap.put(101L, headphones);
-        productMap.put(102L, keyboard);
-        productMap.put(103L, mouse);
-        productMap.put(104L, monitor);
-
-// Retrieve product using ID
-        Product product = productMap.get(103L);
-
-        System.out.println(product.getName());
-
-
-        //Product search process
-        Long searchId = 102L;
-
-        Product foundProduct = productMap.get(searchId);
-
-        if (foundProduct != null) {
-            System.out.println("Product found: " + foundProduct.getName());
-        } else {
-            System.out.println("Product not found");
-        }
+        Product max = products.stream()
+                .max(Comparator.comparingDouble(Product::getPrice))
+                        .orElseThrow();
+        System.out.println(max.getName());
     }
 }
