@@ -1,11 +1,11 @@
 
 package org.example;
 
-import com.shopsphere.product.Product;
-import com.shopsphere.product.ProductNotFoundException;
-import com.shopsphere.product.ProductService;
+import com.shopsphere.product.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import java.util.*;
 
 public class Main {
 
@@ -31,7 +31,7 @@ public class Main {
         //Creating object for ProductService
         ProductService productService = new ProductService();
 
-        //Registe or adding products inside the hashMap inside the ProductService class
+        //Register or adding products inside the hashMap inside the ProductService class
         productService.addProduct(headphones);
         productService.addProduct(keyboard);
         productService.addProduct(mouse);
@@ -57,14 +57,14 @@ public class Main {
 
         // optional method calling in service
         Optional<Product> result = productService.findProductById(102L);
-
         result.ifPresent(product ->
                 System.out.println("Found: " + product.getName())
         );
 
-        Optional<Product> missing = productService.findProductById(999L);
 
+        Optional<Product> missing = productService.findProductById(999L);
         System.out.println("Is missing product empty? " + missing.isEmpty());
+
 
         String productName = productService.findProductById(103L)
                 .map(Product::getName)
@@ -72,43 +72,61 @@ public class Main {
 
         System.out.println(productName);
 
-        //inserting new product
-        Product newProduct = new Product(
-                105L, "USB-C Hub", 1999.00, 12
+
+        // Creating object for DigitalProduct class
+        DigitalProduct ebook = new DigitalProduct(
+                201L,
+                "Java Programming E-book",
+                499.00,
+                100,
+                25.5,
+                "PDF"
         );
 
-        // Test 1: Valid product
-        try {
-            productService.addProduct(newProduct);
-            System.out.println("Valid product added successfully");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        System.out.println(ebook.getName());
+        System.out.println(ebook.getPrice());
+        System.out.println(ebook.getDownloadSize());
+        System.out.println(ebook.getFileFormat());
+
+        System.out.println(ebook.getProductType());
+
+        // creating an object for physical project
+        PhysicalProduct gamingMonitor = new PhysicalProduct(
+                301L, "Gaming Monitor", 15999, 8, 5.5, "60 x 40 x 15 cm"
+        );
+        System.out.println(gamingMonitor.getName());
+        System.out.println(gamingMonitor.getWeight());
+        System.out.println(gamingMonitor.getProductType());
+
+        //implement runtime polymorphism using a collection.
+        List<Product> products = new ArrayList<>();
+
+        products.add(new DigitalProduct(
+                201L, "Java E-book", 499.00, 100, 25.5, "PDF"
+        ));
+
+        products.add(new PhysicalProduct(
+                301L, "Gaming Monitor", 15999.00, 8, 5.5, "60 x 40 x 15 cm"
+        ));
+
+        for (Product product : products) {
+            System.out.println(product.getName());
+            System.out.println(product.getProductType());
         }
 
-        // Test 2: Duplicate ID
-        try {
-            Product duplicate = new Product(
-                    105L, "Wireless Mouse", 999.00, 5
-            );
-            productService.addProduct(duplicate);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Duplicate test: " + e.getMessage());
-        }
+        //Abstraction concept
+        Payment card = new CardPayment(2500.00);
 
-        // Test 3: Product with null ID
-        try {
-            Product invalidProduct = new Product();
-            productService.addProduct(invalidProduct);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid ID test: " + e.getMessage());
-        }
+        card.displayAmount();
+        card.processPayment();
 
-        // Test 4: Null product object
-        try {
-            productService.addProduct(null);
-        } catch (NullPointerException e) {
-            System.out.println("Null product test: " + e.getMessage());
-        }
+        Payment upi = new UPIPayment(1500.00);
 
+        upi.displayAmount();
+        upi.processPayment();
+
+        Payment cod = new CashOnDeliveryPayment(1200.00);
+        cod.processPayment();
+        cod.displayAmount();
     }
 }

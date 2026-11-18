@@ -75,4 +75,23 @@ public class Product {
 
         this.quantity = quantity;
     }
+
+    public String getProductType() {
+        return "General Product";
+    }
+
+    /*//Revision task
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+
+        if(description == null || description.isBlank()){
+            throw new IllegalArgumentException("Description cannot be empty");
+        }
+        this.description = description;
+    }*/
 }
