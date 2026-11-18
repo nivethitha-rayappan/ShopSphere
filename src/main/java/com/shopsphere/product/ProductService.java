@@ -12,35 +12,34 @@ public class ProductService {
 
     // Register a product
     public void addProduct(Product product) {
-        Objects.requireNonNull(product,"Product cannot be null");
+
+        // validates if product is not null
+        Objects.requireNonNull(product, "Product cannot be null");
+
+        //validates if id is positive and not null
+        if (product.getId() == null || product.getId() < 0) {
+            throw new IllegalArgumentException("Product Id must be positive");
+        }
+
+        //validates no duplicate IDs or detects duplicate ID's
+        if (productMap.containsKey(product.getId())) {
+            throw new IllegalArgumentException("Product Id already exists ");
+        }
         productMap.put(product.getId(), product);
 
     }
 
-  /*  // Retrieve product using ID
+    //Getting product by id - product type
     public Product getProductById(Long id) {
+        return Optional.ofNullable(productMap.get(id))
+                .orElseThrow(
+                        () -> new ProductNotFoundException("Product not found with ID:" + id)
+                );
+    }
 
-        Product product = productMap.get(id);
-
-        if (product == null) {
-
-            throw new ProductNotFoundException(
-                    "Product not found with ID: " + id
-            );
-
-        }
-
-        return product;*/
-
-        public Product getProductById(Long id){
-            return Optional.ofNullable(productMap.get(id))
-                    .orElseThrow(
-                            ()-> new ProductNotFoundException("Product not found with ID:"+id)
-                    );
-        }
-
+    //find product by id - optional type
     public Optional<Product> findProductById(Long id) {
-            return Optional.ofNullable(productMap.get(id));
+        return Optional.ofNullable(productMap.get(id));
     }
-    }
+}
 

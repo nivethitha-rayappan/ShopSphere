@@ -41,9 +41,8 @@ public class Main {
 
         try {
             Product productFound = productService.getProductById(102L);
-            System.out.println("Product Found: "+ productFound.getName());
-        }
-        catch (ProductNotFoundException exception){
+            System.out.println("Product Found: " + productFound.getName());
+        } catch (ProductNotFoundException exception) {
             System.out.println(exception.getMessage());
         }
 
@@ -51,9 +50,8 @@ public class Main {
 
         try {
             Product productFound = productService.getProductById(999L);
-            System.out.println("Product Found: "+ productFound.getName());
-        }
-        catch (ProductNotFoundException exception){
+            System.out.println("Product Found: " + productFound.getName());
+        } catch (ProductNotFoundException exception) {
             System.out.println(exception.getMessage());
         }
 
@@ -68,15 +66,49 @@ public class Main {
 
         System.out.println("Is missing product empty? " + missing.isEmpty());
 
-       String productName = productService.findProductById(103L)
-               .map(Product::getName)
-               .orElse("Product not available");
+        String productName = productService.findProductById(103L)
+                .map(Product::getName)
+                .orElse("Product not available");
 
         System.out.println(productName);
 
-/*
-//Objects.requireNonNull checking
-        productService.addProduct(null);*/
+        //inserting new product
+        Product newProduct = new Product(
+                105L, "USB-C Hub", 1999.00, 12
+        );
+
+        // Test 1: Valid product
+        try {
+            productService.addProduct(newProduct);
+            System.out.println("Valid product added successfully");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        // Test 2: Duplicate ID
+        try {
+            Product duplicate = new Product(
+                    105L, "Wireless Mouse", 999.00, 5
+            );
+            productService.addProduct(duplicate);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Duplicate test: " + e.getMessage());
+        }
+
+        // Test 3: Product with null ID
+        try {
+            Product invalidProduct = new Product();
+            productService.addProduct(invalidProduct);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid ID test: " + e.getMessage());
+        }
+
+        // Test 4: Null product object
+        try {
+            productService.addProduct(null);
+        } catch (NullPointerException e) {
+            System.out.println("Null product test: " + e.getMessage());
+        }
 
     }
 }

@@ -1,4 +1,3 @@
-
 package com.shopsphere.product;
 
 public class Product {
@@ -44,9 +43,7 @@ public class Product {
     public void setId(Long id) {
 
         if (id == null || id <= 0) {
-            throw new IllegalArgumentException(
-                    "Product ID must be positive"
-            );
+            throw new IllegalArgumentException("Product ID must be positive");
         }
 
         this.id = id;
@@ -55,9 +52,7 @@ public class Product {
     public void setName(String name) {
 
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Product name cannot be empty"
-            );
+            throw new IllegalArgumentException("Product name cannot be empty");
         }
 
         this.name = name;
@@ -66,9 +61,7 @@ public class Product {
     public void setPrice(double price) {
 
         if (price < 0) {
-            throw new IllegalArgumentException(
-                    "Product price cannot be negative"
-            );
+            throw new IllegalArgumentException("Product price cannot be negative");
         }
 
         this.price = price;
@@ -77,9 +70,7 @@ public class Product {
     public void setQuantity(int quantity) {
 
         if (quantity < 0) {
-            throw new IllegalArgumentException(
-                    "Product quantity cannot be negative"
-            );
+            throw new IllegalArgumentException("Product quantity cannot be negative");
         }
 
         this.quantity = quantity;
