@@ -41,7 +41,7 @@ public class Main {
 
         try {
             Product productFound = productService.getProductById(102L);
-            System.out.println("Product Found:"+ productFound.getName());
+            System.out.println("Product Found: "+ productFound.getName());
         }
         catch (ProductNotFoundException exception){
             System.out.println(exception.getMessage());
@@ -51,13 +51,32 @@ public class Main {
 
         try {
             Product productFound = productService.getProductById(999L);
-            System.out.println("Product Found:"+ productFound.getName());
+            System.out.println("Product Found: "+ productFound.getName());
         }
         catch (ProductNotFoundException exception){
             System.out.println(exception.getMessage());
         }
 
+        // optional method calling in service
+        Optional<Product> result = productService.findProductById(102L);
 
+        result.ifPresent(product ->
+                System.out.println("Found: " + product.getName())
+        );
+
+        Optional<Product> missing = productService.findProductById(999L);
+
+        System.out.println("Is missing product empty? " + missing.isEmpty());
+
+       String productName = productService.findProductById(103L)
+               .map(Product::getName)
+               .orElse("Product not available");
+
+        System.out.println(productName);
+
+/*
+//Objects.requireNonNull checking
+        productService.addProduct(null);*/
 
     }
 }
