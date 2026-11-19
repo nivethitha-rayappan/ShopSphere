@@ -128,5 +128,34 @@ public class Main {
         Payment cod = new CashOnDeliveryPayment(1200.00);
         cod.processPayment();
         cod.displayAmount();
+
+        //Interface
+
+        PaymentProcessor cardProcessor = new CardPaymentProcessor();
+
+        cardProcessor.processPayment(2500.00);
+
+        PaymentProcessor upiProcessor = new UPIPaymentProcessor();
+
+        upiProcessor.processPayment(1500.00);
+
+        PaymentProcessor cashOnDeliveryProcessor = new CashOnDeliveryProcessor();
+        cashOnDeliveryProcessor.processPayment(1200.00);
+
+
+        //implement multiple interface
+        CardPaymentProcessor cardProcessor1 = new CardPaymentProcessor();
+
+        cardProcessor1.processPayment(2500.00);
+        cardProcessor1.refundPayment(500.00);
+        cardProcessor1.generateReceipt(2500.00);
+
+        //Default methods
+
+        PaymentProcessor processor = new CardPaymentProcessor();
+
+        processor.displayPaymentMessage();
+        processor.processPayment(2500.00);
+        PaymentProcessor.showSupportedPaymentInfo();
     }
 }
